@@ -17,7 +17,7 @@
     state: directory
     path: "{{ solr['install_dir'] | default('/opt') }}"
 
-- name: Uncompress solr
+- name: Uncompress Solr
   sudo: yes
   unarchive:
     src: "{{ ansible_env['HOME'] }}/solr-{{ solr['version'] }}.tar.gz"
@@ -25,7 +25,7 @@
     copy: no
     creates: "{{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}"
 
-- name: Configure solr in Tomcat
+- name: Configure Solr in Tomcat
   sudo: yes
   template:
     src: "etc/tomcat7/Catalina/localhost/solr.xml.j2"
@@ -39,7 +39,7 @@
 #    dest: /usr/share/tomcat7/lib/log4j.properties
 #  notify: restart tomcat7
 
-- name: Configure solr lib extensions in Tomcat
+- name: Configure Solr lib extensions in Tomcat
   sudo: yes
   shell: "rsync -au {{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/lib/ext/ /usr/share/tomcat7/lib/"
   changed_when: False
