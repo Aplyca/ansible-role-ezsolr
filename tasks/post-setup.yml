@@ -3,7 +3,7 @@
   sudo: yes
   template:
     src: etc/tomcat7/server.xml.j2
-    dest: "/etc/{{ solr['server'] }}/server.xml"
+    dest: "/etc/{{ tomcat['service'] }}/server.xml"
   notify: restart tomcat
 
 - name: Download solr (eZFind) version {{ solr["version"] }}
@@ -29,7 +29,7 @@
   sudo: yes
   template:
     src: "etc/tomcat7/Catalina/localhost/solr.xml.j2"
-    dest: /etc/{{ solr['server'] }}/Catalina/localhost/solr.xml
+    dest: /etc/{{ tomcat['service'] }}/Catalina/localhost/solr.xml
   notify: restart tomcat
 
 #- name: Configure Solr logs in Tomcat
@@ -54,7 +54,7 @@
   sudo: yes
   file:
     state: directory
-    owner: "{{ solr['server'] }}"
+    owner: "{{ tomcat['service'] }}"
     path: "{{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/solr/{{ item }}"
   with_items: solr['cores']
   changed_when: False  

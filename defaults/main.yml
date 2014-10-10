@@ -5,7 +5,6 @@ tomcat:
   autoDeploy: "false"
 
 solr:
-  server: tomcat7
   install_dir: "/opt"
   version: 2014.07.0
   security: 127.0.0.1
