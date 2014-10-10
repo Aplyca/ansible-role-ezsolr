@@ -1,0 +1,7 @@
+---
+- name: Ensure  Tomcat present present using yum
+  sudo: yes
+  yum:
+    name: "{{ solr['server'] }}"
+    state: present
+    

@@ -1,0 +1,67 @@
+---
+- name: Configure Tomcat
+  sudo: yes
+  template:
+    src: etc/tomcat7/server.xml.j2
+    dest: "/etc/{{ solr['server'] }}/server.xml"
+  notify: restart tomcat
+
+- name: Download solr (eZFind) version {{ solr["version"] }}
+  get_url:
+    url: "https://github.com/ezsystems/ezfind/archive/v{{ solr['version'] }}.tar.gz"
+    dest: "~/solr-{{ solr['version'] }}.tar.gz"
+
+- name: Make sure solr install dir exists
+  sudo: yes
+  file:
+    state: directory
+    path: "{{ solr['install_dir'] | default('/opt') }}"
+
+- name: Uncompress solr
+  sudo: yes
+  unarchive:
+    src: "{{ ansible_env['HOME'] }}/solr-{{ solr['version'] }}.tar.gz"
+    dest: "{{ solr['install_dir'] | default('/opt') }}"
+    copy: no
+    creates: "{{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}"
+
+- name: Configure solr in Tomcat
+  sudo: yes
+  template:
+    src: "etc/tomcat7/Catalina/localhost/solr.xml.j2"
+    dest: /etc/{{ solr['server'] }}/Catalina/localhost/solr.xml
+  notify: restart tomcat
+
+#- name: Configure Solr logs in Tomcat
+#  sudo: yes
+#  template:
+#    src: usr/share/tomcat7/lib/log4j.properties.j2
+#    dest: /usr/share/tomcat7/lib/log4j.properties
+#  notify: restart tomcat7
+
+- name: Configure solr lib extensions in Tomcat
+  sudo: yes
+  shell: "rsync -au {{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/lib/ext/ /usr/share/tomcat7/lib/"
+  changed_when: False
+
+- name: Create cores directories
+  sudo: yes
+  shell: "cd {{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/solr && rsync -au ezp-default/ {{ item }}/"
+  with_items: solr['cores']
+  changed_when: False
+
+- name: Set permissions to cores
+  sudo: yes
+  file:
+    state: directory
+    owner: "{{ solr['server'] }}"
+    path: "{{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/solr/{{ item }}"
+  with_items: solr['cores']
+  changed_when: False  
+    
+- name: Configure Solr cores
+  sudo: yes
+  template:
+    src: opt/solr/java/solr/solr.xml.j2
+    dest: "{{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/solr/solr.xml"
+  notify: restart tomcat
