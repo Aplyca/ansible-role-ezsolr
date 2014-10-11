@@ -1,5 +1,5 @@
 ---
-- name: Ensure  Tomcat present present using apt
+- name: Ensure  Tomcat is present using apt
   sudo: yes
   apt:
     name: "{{ tomcat['service'] }}"
