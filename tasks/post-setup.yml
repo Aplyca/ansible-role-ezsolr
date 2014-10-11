@@ -41,7 +41,7 @@
 
 - name: Configure Solr lib extensions in Tomcat
   sudo: yes
-  shell: "rsync -au {{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/lib/ext/ /usr/share/tomcat7/lib/"
+  shell: "rsync -au {{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/lib/ext/ /usr/share/{{ tomcat['service'] }}/lib/"
   changed_when: False
 
 - name: Create cores directories
