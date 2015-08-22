@@ -1,6 +1,7 @@
 # Ansible Role: eZSolr
 
 [![Build Status](https://travis-ci.org/Aplyca/ansible-role-ezsolr.svg?branch=master)](https://travis-ci.org/Aplyca/ansible-role-ezsolr)
+[![Circle CI](https://circleci.com/gh/Aplyca/ansible-role-ezsolr.svg?style=svg)](https://circleci.com/gh/Aplyca/ansible-role-ezsolr)
 
 Ansible Role that installs and configure eZSolr on Debian/Ubuntu.
 
