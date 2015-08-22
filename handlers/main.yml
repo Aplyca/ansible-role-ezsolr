@@ -1,7 +1,7 @@
 ---
-- name: restart tomcat
+- name: restart solr
   sudo: yes
   service:
-    name: "{{ tomcat['service'] }}"
+    name: solr
     state: restarted
     enabled: yes

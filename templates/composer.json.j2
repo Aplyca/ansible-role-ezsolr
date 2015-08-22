@@ -1,0 +1,25 @@
+{
+    "name": "ezsystems/ezpublish-platform",
+    "description": "eZ Publish 5 platform distribution",
+    "homepage": "http://share.ez.no",
+    "license": "BUL-2.1",
+    "authors": [
+        {
+            "name": "eZ Publish dev-team & eZ Community",
+            "homepage": "https://github.com/ezsystems/ezpublish-community/contributors"
+        }
+    ],
+    {% if ezsolr['bul'] %}
+    "repositories": [
+        { "type": "composer", "url": "https://updates.ez.no/bul" }
+    ],
+    {% endif %}
+    "require": {
+        "php": ">=5.3.17",
+        "ezsystems/ezfind-ls": "{{ ezsolr['version'] }}"
+    },
+    "config": {
+        "process-timeout": 3000,
+        "bin-dir": "bin"
+    }
+}

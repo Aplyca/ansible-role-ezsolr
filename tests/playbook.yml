@@ -1,4 +1,6 @@
 ---
 - hosts: all
-  roles:
-    - mauricios.Solr
+  tasks:
+    - name: Test if Solr is installed and running
+      uri:
+          url: "http://localhost:8983/solr/#/"

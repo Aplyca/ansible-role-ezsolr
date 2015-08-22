@@ -1,6 +1,9 @@
 ---
+dependencies:
+  - { role: aplyca.PHP, tags: ["php"] }
+
 galaxy_info:
-  author: mauricios
+  author: aplyca
   description: Solr server for (for eZ Publish) Debian/Ubuntu/RedHat/CentOS.
   company: "Aplyca SAS"
   license: "license (BSD, MIT)"
@@ -14,6 +17,6 @@ galaxy_info:
     - all
   - name: CentOS
     versions:
-    - all    
+    - all
   categories:
     - web

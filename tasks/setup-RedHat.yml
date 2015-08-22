@@ -4,9 +4,3 @@
   yum:
     name: rsync
     state: present
-
-- name: Ensure  Tomcat present present using yum
-  sudo: yes
-  yum:
-    name: "{{ tomcat['service'] }}"
-    state: present

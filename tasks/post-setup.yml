@@ -1,68 +1,39 @@
 ---
-- name: Configure Tomcat
-  sudo: yes
-  template:
-    src: etc/tomcat7/server.xml.j2
-    dest: "/etc/{{ tomcat['service'] }}/server.xml"
-  notify: restart tomcat
-
-- name: Download solr (eZFind) version {{ solr["version"] }}
-  get_url:
-    url: "https://github.com/ezsystems/ezfind/archive/v{{ solr['version'] }}.tar.gz"
-    dest: "~/solr-{{ solr['version'] }}.tar.gz"
-
-- name: Make sure solr install dir exists
+- name: Make sure eZSolr install dir exists
   sudo: yes
   file:
     state: directory
-    path: "{{ solr['install_dir'] | default('/opt') }}"
+    path: "{{ ezsolr['install_dir'] }}"
+    mode: 0755
+    owner: "{{ ansible_user_id }}"
 
-- name: Uncompress Solr
-  sudo: yes
-  unarchive:
-    src: "{{ ansible_env['HOME'] }}/solr-{{ solr['version'] }}.tar.gz"
-    dest: "{{ solr['install_dir'] | default('/opt') }}"
-    copy: no
-    creates: "{{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}"
+- name: Add composer.json with ezfind
+  template:
+    src: "composer.json.j2"
+    dest: "{{ ezsolr['install_dir'] }}/composer.json"
+  notify: restart solr
 
-- name: Configure Solr in Tomcat
+- name: Install eZFind with composer
+  composer:
+      command: install
+      working_dir: "{{ ezsolr['install_dir'] }}"
+
+- name: Add Solr start/stop script
   sudo: yes
   template:
-    src: "etc/tomcat7/Catalina/localhost/solr.xml.j2"
-    dest: /etc/{{ tomcat['service'] }}/Catalina/localhost/solr.xml
-  notify: restart tomcat
-
-#- name: Configure Solr logs in Tomcat
-#  sudo: yes
-#  template:
-#    src: usr/share/tomcat7/lib/log4j.properties.j2
-#    dest: /usr/share/tomcat7/lib/log4j.properties
-#  notify: restart tomcat7
-
-- name: Configure Solr lib extensions in Tomcat
-  sudo: yes
-  shell: "rsync -au {{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/lib/ext/ /usr/share/{{ tomcat['service'] }}/lib/"
-  changed_when: False
+    src: "solr.j2"
+    dest: /etc/init.d/solr
+    mode: 0755
+  notify: restart solr
 
 - name: Create cores directories
   sudo: yes
-  shell: "cd {{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/solr && rsync -au ezp-default/ {{ item }}/"
-  with_items: solr['cores']
+  shell: "cd {{ ezsolr['install_dir'] }}/extension/ezfind/java/solr && rsync -au ezp-default/ {{ item }}/"
+  with_items: ezsolr['cores']
   changed_when: False
 
-- name: Set permissions to cores
-  sudo: yes
-  file:
-    state: directory
-    owner: "{{ tomcat['service'] }}"
-    path: "{{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/solr/{{ item }}"
-    recurse: yes
-  with_items: solr['cores']
-  changed_when: False  
-    
-- name: Configure Solr cores
-  sudo: yes
+- name: Configure eZSolr cores
   template:
-    src: opt/solr/java/solr/solr.xml.j2
-    dest: "{{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/solr/solr.xml"
-  notify: restart tomcat
+    src: solr.xml.j2
+    dest: "{{ ezsolr['install_dir'] }}/extension/ezfind/java/solr/solr.xml"
+  notify: restart solr

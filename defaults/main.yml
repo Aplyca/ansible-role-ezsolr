@@ -1,13 +1,9 @@
 ---
-tomcat:
+ezsolr:
+  install_dir: /usr/local/ezsolr
+  version: 2015.01.0
+  bul: False
+  host: localhost
   port: 8983
-  address: "*"
-  autoDeploy: "false"
-
-solr:
-  install_dir: "/opt"
-  version: 2014.07.0
-  security: 127.0.0.1
-  persistence: "false"
-  cores:
-    - default
+  persistent: "true"
+  cores: []

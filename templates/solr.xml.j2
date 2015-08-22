@@ -22,20 +22,17 @@
   persistent: Save changes made via the API to this file
   sharedLib: path to a lib directory that will be shared across all cores
 -->
-<solr persistent="{{ solr["persistent"] | default('false') }}">
+<solr persistent="{{ ezsolr["persistent"] }}">
 
   <!--
   adminPath: RequestHandler path to manage cores.
     If 'null' (or absent), cores will not be manageable via request handler
   -->
-  <cores adminPath="/admin/cores" host="${host:}" hostPort="${jetty.port:8983}" hostContext="${hostContext:solr}" defaultCoreName="{{ solr['cores'][0] }}">
-    {% for core in solr['cores'] %}
+  <cores adminPath="/admin/cores" defaultCoreName="{{ ezsolr['cores'][0] | default ('ezp-default') }}">
+    {% for core in ezsolr['cores'] %}
     <core name="{{ core }}" instanceDir="{{ core }}" />
+    {% else %}
+    <core name="ezp-default" instanceDir="ezp-default" />
     {% endfor %}
-
-    <shardHandlerFactory name="shardHandlerFactory" class="HttpShardHandlerFactory">
-      <str name="urlScheme">${urlScheme:}</str>
-    </shardHandlerFactory>
   </cores>
-
 </solr>

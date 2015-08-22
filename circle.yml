@@ -1,0 +1,10 @@
+dependencies:
+  pre:
+    - sudo pip install -r build/requirements.txt
+
+test:
+  pre:
+    - sudo ln -s ansible-role-ezsolr ../aplyca.eZSolr
+  override:
+    - ansible-galaxy install -r build/dependencies.txt  
+    - tests/tests.sh

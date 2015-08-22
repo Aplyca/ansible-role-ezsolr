@@ -1,8 +1,8 @@
 ---
-- name: Ensure  Tomcat is present using apt
+- name: Ensure  JRE is present using apt
   sudo: yes
   apt:
-    name: "{{ tomcat['service'] }}"
+    name: default-jre-headless
     state: present
     update_cache: yes
-    cache_valid_time: 86400    
+    cache_valid_time: 86400

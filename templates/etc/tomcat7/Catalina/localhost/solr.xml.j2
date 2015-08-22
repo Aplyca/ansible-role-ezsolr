@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<Context docBase="{{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/webapps/solr.war" debug="0" crossContext="true">
-  <Environment name="solr/home" type="java.lang.String" value="{{ solr['install_dir'] | default('/opt') }}/ezfind-{{ solr['version'] }}/java/solr" override="true" />
-  {% if solr['allow'] is defined %}
-  <Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="{{ solr['allow'] | default('127.0.0.1') }}" />
-  {% endif %}
-</Context>
