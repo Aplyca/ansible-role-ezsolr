@@ -8,13 +8,13 @@ ansible-galaxy install -r build/dependencies.yml
 
 echo "Checking syntax"
 
-ansible-playbook -i build/inventory build/playbook.yml --connection=local --syntax-check
+ansible-playbook -i build/inventory build/playbook.yml --extra-vars "@tests/settings.yml" --connection=local --syntax-check
 
 echo "Running role"
-ansible-playbook -i build/inventory build/playbook.yml --connection=local
+ansible-playbook -i build/inventory build/playbook.yml --extra-vars "@tests/settings.yml" --connection=local
 
 echo "Checking idempotence"
-ansible-playbook -i build/inventory build/playbook.yml --connection=local | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+ansible-playbook -i build/inventory build/playbook.yml --extra-vars "@tests/settings.yml" --connection=local | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
 
 echo "Running tests"
 ansible-playbook -i build/inventory tests/playbook.yml --connection=local

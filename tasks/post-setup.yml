@@ -28,7 +28,7 @@
 
 - name: Create cores directories
   sudo: yes
-  shell: "cd {{ ezsolr['install_dir'] }}/extension/ezfind/java/solr && rsync -au ezp-default/ {{ item }}/"
+  shell: "cd {{ ezsolr['install_dir'] }}/extension/ezfind/java/solr && if [ ! -f {{ item }}/conf/schema.xml ]; then rsync -au ezp-default/ {{ item }}/; fi "
   with_items: ezsolr['cores']
   changed_when: False
 

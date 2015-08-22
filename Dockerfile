@@ -10,11 +10,8 @@ WORKDIR /tmp/aplyca.eZSolr
 # Provision image
 RUN ./build/provision.sh
 
-# Create mount points for volumes
-VOLUME ["/etc/varnish"]
-
-# Expose MariaDB port
-EXPOSE 80
+# Expose Solr port
+EXPOSE 8983
 
 # Start AWS service
 ENTRYPOINT ["/bin/bash", "./build/entrypoint.sh"]
