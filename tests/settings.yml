@@ -2,4 +2,6 @@
 ezsolr:
   host: 0.0.0.0
   cores:
-    - test
+    - name: test
+      synonyms:
+        - "tests,test"
