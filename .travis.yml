@@ -4,7 +4,7 @@ python: "2.7"
 
 before_install:
   - sudo apt-get update -qq
-  - ln -s ansible-role-ezsolr ../aplyca.eZSolr
+  - ln -s ansible-role-ezsolr ../Aplyca.eZSolr
 
 install:
   # Install Ansible.

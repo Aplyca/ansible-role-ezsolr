@@ -4,7 +4,7 @@ dependencies:
 
 test:
   pre:
-    - sudo ln -s ansible-role-ezsolr ../aplyca.eZSolr
+    - sudo ln -s ansible-role-ezsolr ../Aplyca.eZSolr
   override:
     - ansible-galaxy install -r build/dependencies.yml 
     - tests/tests.sh

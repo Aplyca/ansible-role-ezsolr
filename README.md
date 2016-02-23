@@ -20,7 +20,7 @@ ansible-galaxy install aplyca.eZSolr
 You can add this role as a dependency for other roles, add the role to the meta/main.yml file of your own role:
 ```yaml
 dependencies:
-  - { role: mauricios.eZSolr }
+  - { role: Aplyca.eZSolr }
 ```
 
 ## Role Variables
