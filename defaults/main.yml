@@ -6,4 +6,6 @@ ezsolr:
   host: localhost
   port: 8983
   persistent: "true"
-  cores: []
+  cores:
+    - name: test
+      synonyms: "{{ lookup('file', 'synonyms.txt') }}"

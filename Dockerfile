@@ -4,8 +4,8 @@ LABEL Description="eZSolr installed and configured using Ansible" Vendor="Aplyca
 
 
 # Adding Ansible role
-ADD . /tmp/aplyca.eZSolr
-WORKDIR /tmp/aplyca.eZSolr
+ADD . /tmp/Aplyca.eZSolr
+WORKDIR /tmp/Aplyca.eZSolr
 
 # Provision image
 RUN ./build/provision.sh
