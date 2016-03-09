@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - { role: aplyca.PHP, tags: ["php"] }
+  - { role: Aplyca.PHP, tags: ["php"] }
 
 galaxy_info:
   author: aplyca

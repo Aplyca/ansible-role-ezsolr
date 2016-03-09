@@ -3,20 +3,20 @@
   become: yes
   file:
     state: directory
-    path: "{{ ezsolr['install_dir'] }}"
+    path: "{{ ezsolr.install_dir }}"
     mode: 0755
     owner: "{{ ansible_user_id }}"
 
 - name: Add composer.json with ezfind
   template:
     src: "composer.json.j2"
-    dest: "{{ ezsolr['install_dir'] }}/composer.json"
+    dest: "{{ ezsolr.install_dir }}/composer.json"
   notify: restart solr
 
 - name: Install eZFind with composer
   composer:
-      command: install
-      working_dir: "{{ ezsolr['install_dir'] }}"
+    command: install
+    working_dir: "{{ ezsolr.install_dir }}"
 
 - name: Add Solr start/stop script
   become: yes
@@ -28,20 +28,20 @@
 
 - name: Create cores directories
   become: yes
-  shell: "cd {{ ezsolr['install_dir'] }}/extension/ezfind/java/solr && if [ ! -f {{ item.name }}/conf/schema.xml ]; then rsync -au ezp-default/ {{ item.name }}/; fi "
-  with_items: ezsolr['cores']
+  shell: "cd {{ ezsolr.install_dir }}/extension/ezfind/java/solr && if [ ! -f {{ item.name }}/conf/schema.xml ]; then rsync -au ezp-default/ {{ item.name }}/; fi "
+  with_items: "{{ ezsolr.cores }}"
   changed_when: False
 
 - name: Add Synonyms file
   template:
     src: synonyms.txt.j2
-    dest: "{{ ezsolr['install_dir'] }}/extension/ezfind/java/solr/{{ item.name }}/conf/synonyms.txt"
-  with_items: ezsolr['cores']    
+    dest: "{{ ezsolr.install_dir }}/extension/ezfind/java/solr/{{ item.name }}/conf/synonyms.txt"
+  with_items: "{{ ezsolr.cores }}"
   notify: restart solr
   tags: synonyms
 
 - name: Configure eZSolr cores
   template:
     src: solr.xml.j2
-    dest: "{{ ezsolr['install_dir'] }}/extension/ezfind/java/solr/solr.xml"
+    dest: "{{ ezsolr.install_dir }}/extension/ezfind/java/solr/solr.xml"
   notify: restart solr
