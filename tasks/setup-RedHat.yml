@@ -1,6 +1,6 @@
 ---
 - name: Ensure RSync present present using yum
-  sudo: yes
+  become: yes
   yum:
     name: rsync
     state: present

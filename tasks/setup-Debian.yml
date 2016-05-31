@@ -1,6 +1,6 @@
 ---
 - name: Ensure  JRE is present using apt
-  sudo: yes
+  become: yes
   apt:
     name: default-jre-headless
     state: present
