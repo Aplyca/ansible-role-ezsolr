@@ -28,11 +28,10 @@
   adminPath: RequestHandler path to manage cores.
     If 'null' (or absent), cores will not be manageable via request handler
   -->
-  <cores adminPath="/admin/cores" defaultCoreName="{{ ezsolr.cores[0].name | default ('ezp-default') }}">
+  <cores adminPath="/admin/cores" defaultCoreName="ezp-default">
     {% for core in ezsolr.cores %}
     <core name="{{ core.name }}" instanceDir="{{ core.name }}" />
-    {% else %}
-    <core name="ezp-default" instanceDir="ezp-default" />
     {% endfor %}
+    <core name="ezp-default" instanceDir="ezp-default" />
   </cores>
 </solr>

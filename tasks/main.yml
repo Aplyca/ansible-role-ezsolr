@@ -1,4 +1,7 @@
 ---
+- debug: var=ezsolr verbosity=1
+  tags: vars
+  
 - include: setup-RedHat.yml
   when: ansible_os_family == 'RedHat'
 

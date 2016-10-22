@@ -1,13 +1,15 @@
 ---
-- hosts: all
-  tasks:
+- name: Installs Solr for eZ
+  hosts: all
+  roles:
+    - { role: Aplyca.eZSolr, tags: ["ezsolr"] }
+  post_tasks:
     - name: Test if Solr is installed and running
       uri:
           url: "http://localhost:8983/solr/admin/cores"
-
     - name: Test if custom core of Solr is available
       uri:
           url: "http://localhost:8983/solr/test/admin/ping"
           return_content: yes
       register: result
-      failed_when: "'<str name=\"status\">OK</str>' not in result.content"      
+      failed_when: "'<str name=\"status\">OK</str>' not in result.content"        

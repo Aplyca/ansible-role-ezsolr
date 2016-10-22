@@ -8,10 +8,9 @@ before_install:
 
 install:
   # Install Ansible.
-  - sudo pip install -r build/requirements.txt
+  - sudo pip install -r tests/requirements.txt
 
 script:
-  - ansible-galaxy install -r build/dependencies.yml
   - tests/tests.sh
 
 notifications:
