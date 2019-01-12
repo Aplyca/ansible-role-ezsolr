@@ -1,9 +1,7 @@
 ---
 ezsolr:
-  install_dir: /usr/local/ezsolr
-  version: 2015.01.0
-  bul: False
-  host: localhost
-  port: 8983
-  persistent: "true"
-  cores: []
+    install_dir: /usr/local
+    download_url: https://github.com/ezsystems/ezfind/archive/v2017.12.0.tar.gz
+    host: localhost
+    port: 8983
+    cores: []

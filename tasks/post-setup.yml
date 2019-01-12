@@ -2,46 +2,47 @@
 - name: Make sure eZSolr install dir exists
   become: yes
   file:
-    state: directory
-    path: "{{ ezsolr.install_dir }}"
-    mode: 0755
-    owner: "{{ ansible_user_id }}"
+      state: directory
+      path: "{{ ezsolr.install_dir }}"
+      mode: 0755
+      owner: "{{ ansible_user_id }}"
 
-- name: Add composer.json with ezfind
-  template:
-    src: "composer.json.j2"
-    dest: "{{ ezsolr.install_dir }}/composer.json"
-  notify: restart solr
+- name: Downloading eZSolr
+  get_url:
+      url: "{{ ezsolr.download_url }}"
+      dest: "/tmp/solr.downloaded"
 
-- name: Install eZFind with composer
-  composer:
-    command: install
-    working_dir: "{{ ezsolr.install_dir }}"
+- name: Unarchive eZSolr from URL
+  shell: "unzip /tmp/solr.downloaded 'java/*' && mv java ezsolr"
+  args:
+      chdir: "{{ ezsolr.install_dir }}"
+      creates: ezsolr/start.jar
+      warn: no
 
 - name: Add Solr start/stop script
   become: yes
   template:
-    src: "solr.j2"
-    dest: /etc/init.d/solr
-    mode: 0755
+      src: "solr.j2"
+      dest: /etc/init.d/solr
+      mode: 0755
   notify: restart solr
 
 - name: Create cores directories
   become: yes
-  shell: "cd {{ ezsolr.install_dir }}/extension/ezfind/java/solr && if [ ! -f {{ item.name }}/conf/schema.xml ]; then rsync -au ezp-default/ {{ item.name }}/; fi "
+  shell: "cd {{ ezsolr.install_dir }}/ezsolr/solr && if [ ! -f {{ item.name }}/conf/schema.xml ]; then rsync -au ezp-default/ {{ item.name }}/; fi "
   with_items: "{{ ezsolr.cores }}"
   changed_when: False
 
 - name: Add Synonyms file
   template:
-    src: synonyms.txt.j2
-    dest: "{{ ezsolr.install_dir }}/extension/ezfind/java/solr/{{ item.name }}/conf/synonyms.txt"
+      src: synonyms.txt.j2
+      dest: "{{ ezsolr.install_dir }}/ezsolr/solr/{{ item.name }}/conf/synonyms.txt"
   with_items: "{{ ezsolr.cores }}"
   notify: restart solr
   tags: synonyms
 
 - name: Configure eZSolr cores
   template:
-    src: solr.xml.j2
-    dest: "{{ ezsolr.install_dir }}/extension/ezfind/java/solr/solr.xml"
+      src: solr.xml.j2
+      dest: "{{ ezsolr.install_dir }}/ezsolr/solr/solr.xml"
   notify: restart solr

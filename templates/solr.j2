@@ -19,13 +19,13 @@
 
 # Replace with the java directory of your eZ Find extension
 # (example: /var/www/ezpublish/extension/ezfind/java)
-SOLR_HOME={{ ezsolr['install_dir'] }}/extension/ezfind/java
+SOLR_HOME={{ ezsolr.install_dir }}/ezsolr
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Solr indexing server"
 NAME=solr
 DAEMON=/usr/bin/java
-DAEMON_ARGS="-Djetty.host={{ ezsolr['host'] }} -Djetty.port={{ ezsolr['port'] }} -jar start.jar"
+DAEMON_ARGS="-Djetty.host={{ ezsolr.host }} -Djetty.port={{ ezsolr.port }} -jar start.jar"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
