@@ -1,7 +1,22 @@
 ---
-- name: restart solr
+- name: restart init solr
   become: yes
   service:
-    name: solr
-    state: restarted
-    enabled: yes
+      name: solr
+      state: restarted
+      enabled: yes
+
+- name: enable solr
+  become: yes
+  systemd:
+      name: solr
+      enabled: yes
+      masked: no
+      daemon_reload: yes
+
+- name: restart solr
+  become: yes
+  systemd:
+      state: restarted
+      daemon_reload: yes
+      name: solr

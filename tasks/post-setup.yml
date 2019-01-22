@@ -25,7 +25,17 @@
       src: "solr.j2"
       dest: /etc/init.d/solr
       mode: 0755
-  notify: restart solr
+  notify: restart init solr
+
+- name: Configure Systemd service for Solr
+  become: yes
+  template:
+      src: "solr.service.j2"
+      dest: /lib/systemd/system/solr.service
+      mode: 0644
+  notify:
+      - enable solr
+      - restart solr
 
 - name: Create cores directories
   become: yes

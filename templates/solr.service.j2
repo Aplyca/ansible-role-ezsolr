@@ -1,0 +1,19 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=Solr Search Engine service 
+Documentation=http://lucene.apache.org/solr/ man:solr
+After=syslog.target network.target remote-fs.target nss-lookup.target systemd-journald-dev-log.socket
+Before=multi-user.target apache2.service
+
+[Service]
+User=root
+WorkingDirectory={{ ezsolr.install_dir }}/ezsolr
+PIDFile=/var/run/$NAME.pid
+ExecStart=/usr/bin/java -Djetty.host={{ ezsolr.host }} -Djetty.port={{ ezsolr.port }} -jar start.jar
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
